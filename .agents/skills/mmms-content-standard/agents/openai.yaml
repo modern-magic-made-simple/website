@@ -1,0 +1,4 @@
+interface:
+  display_name: "内容编写规范"
+  short_description: "统一项目内文章分类、时效标注、资料引用和概念链接规则"
+  default_prompt: "使用 $mmms-content-standard 编写或审查这篇项目文章，检查分类、日期、资料来源和概念链接。"
