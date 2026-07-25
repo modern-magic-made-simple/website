@@ -3,6 +3,11 @@ declare module "*.scss" {
   export = content
 }
 
+declare module "micromorph" {
+  const micromorph: (from: Node, to: Node) => Promise<void>
+  export default micromorph
+}
+
 // dom custom event
 interface CustomEventMap {
   prenav: CustomEvent<{}>
