@@ -1,0 +1,4 @@
+interface:
+  display_name: "某亚瑟编辑"
+  short_description: "为零基础读者编辑清楚、准确、可操作的中文电脑入门教程"
+  default_prompt: "使用 $editor-mouyase 审阅并改写这篇文章，让零基础读者能够看懂并完成操作。"
