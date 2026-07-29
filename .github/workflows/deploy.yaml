@@ -1,0 +1,130 @@
+name: 部署
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: 构建并部署
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_PORT: ${{ secrets.VPS_PORT }}
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_DEPLOY_PATH: ${{ secrets.VPS_DEPLOY_PATH }}
+      VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+      VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+
+    steps:
+      - name: 获取仓库内容
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: 安装项目依赖
+        run: npm ci
+
+      - name: 安装 Quartz 插件
+        run: npm run install-plugins
+
+      - name: 构建网站
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "开始构建网站……"
+          npx quartz build
+          echo "网站构建完成，产物位于 public/ 目录。"
+
+      - name: 检查部署配置
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for name in VPS_HOST VPS_PORT VPS_USER VPS_DEPLOY_PATH VPS_KNOWN_HOSTS VPS_SSH_PRIVATE_KEY; do
+            if [[ -z "${!name:-}" ]]; then
+              echo "::error::缺少 GitHub Actions Secret：${name}"
+              exit 1
+            fi
+          done
+
+          if [[ ! "$VPS_PORT" =~ ^[0-9]+$ ]]; then
+            echo "::error::VPS_PORT 必须是端口数字。"
+            exit 1
+          fi
+
+          if [[ "$VPS_DEPLOY_PATH" != /* || "$VPS_DEPLOY_PATH" == "/" ]]; then
+            echo "::error::VPS_DEPLOY_PATH 必须是绝对路径，并且不能是根目录 /。"
+            exit 1
+          fi
+
+          if [[ ! -d public || ! -f public/404.html ]]; then
+            echo "::error::没有找到完整的 Quartz 构建产物。"
+            exit 1
+          fi
+
+          echo "部署配置与构建产物检查通过。"
+
+      - name: 配置 SSH 连接
+        shell: bash
+        run: |
+          set -euo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+          echo "SSH 密钥与服务器身份信息配置完成。"
+
+      - name: 检查服务器部署目录
+        shell: bash
+        run: |
+          set -euo pipefail
+          target="${VPS_DEPLOY_PATH%/}"
+
+          echo "正在检查服务器上的部署目录……"
+          ssh \
+            -i ~/.ssh/id_ed25519 \
+            -p "$VPS_PORT" \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            "$VPS_USER@$VPS_HOST" \
+            "test -d '$target' && test -w '$target' && test -f '$target/.site-deployment-root'"
+          echo "服务器部署目录检查通过。"
+
+      - name: 同步网站文件到服务器
+        shell: bash
+        run: |
+          set -euo pipefail
+          target="${VPS_DEPLOY_PATH%/}"
+
+          echo "开始同步网站文件……"
+          rsync \
+            --recursive \
+            --links \
+            --perms \
+            --times \
+            --compress \
+            --delete-delay \
+            --delay-updates \
+            --exclude=.site-deployment-root \
+            --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
+            -e "ssh -i ~/.ssh/id_ed25519 -p $VPS_PORT -o BatchMode=yes -o IdentitiesOnly=yes" \
+            public/ \
+            "$VPS_USER@$VPS_HOST:$target/"
+          echo "网站文件同步完成。"
