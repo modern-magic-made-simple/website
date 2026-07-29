@@ -13,8 +13,8 @@ export default (() => {
     ctx,
   }: QuartzComponentProps) => {
     const titleSuffix = cfg.pageTitleSuffix ?? ""
-    const title =
-      (fileData.frontmatter?.title ?? i18n(cfg.locale).propertyDefaults.title) + titleSuffix
+    const pageTitle = fileData.frontmatter?.title ?? i18n(cfg.locale).propertyDefaults.title
+    const title = fileData.slug === "index" ? pageTitle : pageTitle + titleSuffix
     const description =
       fileData.frontmatter?.socialDescription ??
       fileData.frontmatter?.description ??
@@ -27,9 +27,15 @@ export default (() => {
     const baseDir = fileData.slug === "404" ? path : pathToRoot(fileData.slug!)
     const iconPath = joinSegments(baseDir, "static/icon.png")
 
-    // Url of current page
+    // URL of the current page. The homepage is served from `/`, not `/index`.
     const socialUrl =
-      fileData.slug === "404" ? url.toString() : joinSegments(url.toString(), fileData.slug!)
+      fileData.slug === "404" || fileData.slug === "index"
+        ? url.toString()
+        : joinSegments(url.toString(), fileData.slug!)
+    const canonicalUrl = cfg.baseUrl && fileData.slug !== "404" ? socialUrl : undefined
+    const contentType = fileData.frontmatter?.contentType
+    const openGraphType =
+      contentType === "concept" || contentType === "tutorial" ? "article" : "website"
 
     const usesCustomOgImage = ctx.cfg.plugins.emitters.some((e) => e.name === "CustomOgImages")
     const ogImageDefaultPath = `https://${cfg.baseUrl}/static/og-image.png`
@@ -59,9 +65,10 @@ export default (() => {
         )}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+        {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         <meta name="og:site_name" content={cfg.pageTitle}></meta>
         <meta property="og:title" content={title} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={openGraphType} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />

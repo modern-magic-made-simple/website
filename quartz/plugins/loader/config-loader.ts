@@ -695,9 +695,10 @@ export async function loadQuartzLayout(layoutOverrides?: {
   const head = HeadModule.default()
 
   // Find footer from component registry (loaded during plugin instantiation)
-  const footerEntry = json.plugins.find(
-    (e) => e.enabled && extractPluginName(e.source) === "footer",
-  )
+  const footerEntry = json.plugins.find((e) => {
+    const name = extractPluginName(e.source)
+    return e.enabled && (name === "footer" || name.endsWith("/footer"))
+  })
   let footer: QuartzComponent | undefined
   if (footerEntry) {
     // Try registry lookup: plugin name ("footer") or export name ("Footer")
