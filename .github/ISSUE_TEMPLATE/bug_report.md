@@ -1,40 +1,33 @@
 ---
-name: Bug report
-about: Something about Quartz isn't working the way you expect
-title: ""
+name: 网站问题
+about: 报告页面无法访问、链接错误或显示异常
+title: "[问题] "
 labels: bug
 assignees: ""
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## 问题描述
 
-**To Reproduce**
-Steps to reproduce the behavior:
+请说明遇到了什么问题。
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## 出现位置
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+请提供页面地址或文件路径。
 
-**Screenshots and Source**
-If applicable, add screenshots to help explain your problem.
+## 复现步骤
 
-You can help speed up fixing the problem by either
+1.
+2.
+3.
 
-1. providing a simple reproduction
-2. linking to your Quartz repository where the problem can be observed
+## 预期结果
 
-**Desktop (please complete the following information):**
+请说明你认为正常情况下应该出现什么结果。
 
-- Quartz Version: [e.g. v4.1.2]
-- `node` Version: [e.g. v18.16]
-- `npm` version: [e.g. v10.1.0]
-- OS: [e.g. iOS]
-- Browser [e.g. chrome, safari]
+## 使用环境
 
-**Additional context**
-Add any other context about the problem here.
+- 设备：
+- 操作系统：
+- 浏览器：
+
+如有需要，请附上截图。

@@ -1,19 +1,19 @@
 ---
-name: Feature request
-about: Suggest an idea or improvement for Quartz
-title: ""
+name: 内容或功能建议
+about: 建议新增文章、修正内容或改进网站
+title: "[建议] "
 labels: enhancement
 assignees: ""
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## 建议内容
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+请说明你希望新增或修改什么。
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+## 目前的问题
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+请说明现有内容为什么难以理解、不够准确，或者缺少哪些信息。
+
+## 参考资料
+
+如果建议涉及事实修正，请附上可靠的资料来源。

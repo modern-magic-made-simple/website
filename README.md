@@ -1,17 +1,14 @@
-# Quartz v5
+# 简单易懂的现代魔法
 
-> “[One] who works with the door open gets all kinds of interruptions, but [they] also occasionally gets clues as to what the world is and what might be important.” — Richard Hamming
+一个面向电脑初学者的计算机基础知识网站。
 
-Quartz is a set of tools that helps you publish your [digital garden](https://jzhao.xyz/posts/networked-thought) and notes as a website for free.
+网站地址：<https://mmms.yojigen.cn>
 
-🔗 Read the documentation and get started: https://quartz.jzhao.xyz/
+文章存放在 `content/` 目录中，网站使用 [Quartz](https://quartz.jzhao.xyz/) 构建。
 
-[Join the Discord Community](https://discord.gg/cRFFHYye7t)
+## 本地预览
 
-## Sponsors
-
-<p align="center">
-  <a href="https://github.com/sponsors/jackyzha0">
-    <img src="https://cdn.jsdelivr.net/gh/jackyzha0/jackyzha0/sponsorkit/sponsors.svg" />
-  </a>
-</p>
+```bash
+npm install
+npx quartz build --serve
+```
