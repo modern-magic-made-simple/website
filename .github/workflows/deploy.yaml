@@ -104,7 +104,7 @@ jobs:
             -o BatchMode=yes \
             -o IdentitiesOnly=yes \
             "$VPS_USER@$VPS_HOST" \
-            "test -d '$target' && test -w '$target' && test -f '$target/.site-deployment-root'"
+            "test -d '$target' && test -w '$target' && test -f '$target/.website-root'"
           echo "服务器部署目录检查通过。"
 
       - name: 同步网站文件到服务器
@@ -122,7 +122,7 @@ jobs:
             --compress \
             --delete-delay \
             --delay-updates \
-            --exclude=.site-deployment-root \
+            --exclude=.website-root \
             --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
             -e "ssh -i ~/.ssh/id_ed25519 -p $VPS_PORT -o BatchMode=yes -o IdentitiesOnly=yes" \
             public/ \
