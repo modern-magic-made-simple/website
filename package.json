@@ -1,15 +1,15 @@
 {
-  "name": "@jackyzha0/quartz",
-  "description": "🌱 publish your digital garden and notes as a website",
+  "name": "@modern-magic-made-simple/website",
+  "description": "简单易懂的现代魔法：面向电脑初学者的计算机基础知识网站",
   "private": true,
   "version": "5.0.0",
   "type": "module",
-  "author": "jackyzha0 <j.zhao2k19@gmail.com>",
+  "author": "某亚瑟 <mouyase@qq.com>",
   "license": "MIT",
-  "homepage": "https://quartz.jzhao.xyz",
+  "homepage": "https://mmms.yojigen.cn",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jackyzha0/quartz.git"
+    "url": "https://github.com/modern-magic-made-simple/website.git"
   },
   "scripts": {
     "quartz": "./quartz/bootstrap-cli.mjs",
@@ -26,11 +26,11 @@
     "node": ">=24"
   },
   "keywords": [
-    "site generator",
-    "ssg",
-    "digital-garden",
-    "markdown",
-    "blog",
+    "computer-literacy",
+    "computer-basics",
+    "digital-literacy",
+    "chinese",
+    "education",
     "quartz"
   ],
   "bin": {
