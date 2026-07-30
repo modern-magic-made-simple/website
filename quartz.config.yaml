@@ -197,6 +197,8 @@ plugins:
       group: toolbar
   - source: "@quartz-community/breadcrumbs"
     enabled: true
+    options:
+      rootName: 主页
     layout:
       position: beforeBody
       priority: 5
